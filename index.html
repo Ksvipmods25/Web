@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Layout</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #000;
+            color: white;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        .linear-background {
+            width: 100%;
+            height: 100px;
+            background: black;
+            position: relative;
+            margin-bottom: 50px;
+        }
+
+        .linear-stroke {
+            width: 100%;
+            height: 100px;
+            border: 2px solid #00ffff;
+            margin-bottom: 20px;
+        }
+
+        @keyframes particleAnimation {
+            0% {
+                transform: translateY(0) translateX(0);
+            }
+            50% {
+                transform: translateY(-10px) translateX(10px);
+            }
+            100% {
+                transform: translateY(0) translateX(0);
+            }
+        }
+
+        .particles {
+            position: absolute;
+            width: 550px;
+            height: 550px;
+            background-color: #00ffff;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #00ffff;
+            animation: particleAnimation 1.5s infinite;
+        }
+
+        .textview {
+            font-size: 25px;
+            margin: 50px 0;
+        }
+
+        button {
+            margin: 25px;
+            padding: 10px 20px;
+            font-size: 30px;
+            background: #00ffff;
+            color: black;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            background: #333;
+            margin: 5px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="linear-background">
+        <div class="particles" style="top: 0; left: 30%;"></div>
+        <div class="particles" style="top: 0; left: 50%;"></div>
+        <div class="particles" style="top: 0; left: 70%;"></div>
+    </div>
+
+    <div class="linear-stroke"></div>
+
+    <div id="textview1" class="textview"></div>
+    <div id="textview2" class="textview"></div>
+
+    <div id="textview3" class="textview">Click the "Check Result" button</div>
+
+    <button id="check-result">Check Result</button>
+    <button id="history">History</button>
+
+    <ul id="list-view"></ul>
+
+    <script>
+        let lastPeriod = '';
+        let canCheck = true;
+        const resultList = document.getElementById('list-view');
+
+        // Timer logic
+        setInterval(() => {
+            const now = new Date();
+            const seconds = now.getUTCSeconds();
+            const remainingSeconds = 60 - seconds;
+            const minutes = now.getUTCMinutes();
+            const totalMinutes = now.getUTCHours() * 60 + minutes;
+
+            const textview1 = document.getElementById('textview1');
+            const textview2 = document.getElementById('textview2');
+
+            const newPeriod = `${now.getUTCFullYear()}${String(now.getUTCMonth() + 1).padStart(2, '0')}${String(now.getUTCDate()).padStart(2, '0')}1000${totalMinutes + 10001}`;
+            textview1.innerText = newPeriod;
+
+            const formattedTime = `   ${String(remainingSeconds).padStart(2, '0')}  :  ${String(remainingSeconds).padStart(2, '0')}`;
+            textview2.innerText = formattedTime;
+
+            if (newPeriod !== lastPeriod) {
+                canCheck = true;
+                lastPeriod = newPeriod;
+            }
+        }, 1000);
+
+        // Button click logic
+        document.getElementById('check-result').addEventListener('click', () => {
+            const textview3 = document.getElementById('textview3');
+
+            if (canCheck) {
+                canCheck = false;
+
+                const bigg = Math.floor(Math.random() * 100) + 1;
+                const small = Math.floor(Math.random() * 10) + 1;
+
+                textview3.innerText = result;
+
+                const listItem = document.createElement('li');
+                listItem.innerText = result;
+                resultList.appendChild(listItem);
+            } else {
+                textview3.innerText = 'Please wait for the next period!';
+            }
+        });
+    </script>
+</body>
+</html>
